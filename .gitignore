@@ -1,0 +1,15 @@
+node_modules
+.DS_Store
+.tmp
+tmp
+dist
+npm-debug.log*
+yarn.lock
+.vscode/
+.payload/
+
+# Ignore all .md files except README.md
+*.md
+!README.md
+!LICENSE.md
+
