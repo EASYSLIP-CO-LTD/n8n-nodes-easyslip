@@ -12,4 +12,5 @@ yarn.lock
 *.md
 !README.md
 !LICENSE.md
+!CHANGELOG.md
 
