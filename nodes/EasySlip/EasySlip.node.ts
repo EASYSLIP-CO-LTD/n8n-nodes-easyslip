@@ -268,6 +268,10 @@ export class EasySlip implements INodeType {
 								value: '014',
 							},
 							{
+								name: 'ธนาคารพัฒนาวิสาหกิจขนาดกลางและขนาดย่อยแห่งประเทศไทย (SME)',
+								value: '098',
+							},
+							{
 								name: 'ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร (BAAC)',
 								value: '034',
 							},
@@ -294,10 +298,6 @@ export class EasySlip implements INodeType {
 							{
 								name: 'ธนาคารไอซีบีซี (ไทย) (ICBCT)',
 								value: '070',
-							},
-							{
-								name: 'ธนาคารพัฒนาวิสาหกิจขนาดกลางและขนาดย่อยแห่งประเทศไทย (SME)',
-								value: '098',
 							},
 						],
 						default: '',
