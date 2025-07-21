@@ -22,15 +22,15 @@ export class EasySlip implements INodeType {
 		},
 		inputs: [NodeConnectionType.Main],
 		outputs: [
-		{
-			type: NodeConnectionType.Main,
-			displayName: 'Matched / All',
-		},
-		{
-			type: NodeConnectionType.Main,
-			displayName: 'Not Matched',
-		},
-	],
+			{
+				type: NodeConnectionType.Main,
+				displayName: 'Matched / All',
+			},
+			{
+				type: NodeConnectionType.Main,
+				displayName: 'Not Matched',
+			},
+		],
 		usableAsTool: true,
 		credentials: [
 			{
@@ -301,14 +301,16 @@ export class EasySlip implements INodeType {
 							},
 						],
 						default: '',
-						description: 'Filter results by specific receiver bank code - non-matching items go to second output',
+						description:
+							'Filter results by specific receiver bank code - non-matching items go to second output',
 					},
 					{
 						displayName: 'Filter by Receiver Name',
 						name: 'receiverName',
 						type: 'string',
 						default: '',
-						description: 'Filter results by receiver name (partial match) - non-matching items go to second output',
+						description:
+							'Filter results by receiver name (partial match) - non-matching items go to second output',
 					},
 					{
 						displayName: 'Enable Debug Logging',
@@ -322,12 +324,11 @@ export class EasySlip implements INodeType {
 		],
 	};
 
-
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 		const matchedData: INodeExecutionData[] = [];
 		const filteredData: INodeExecutionData[] = [];
-		
+
 		// Check if any filters are enabled to determine output structure
 		let hasAnyFilters = false;
 		for (let i = 0; i < items.length; i++) {
@@ -348,7 +349,6 @@ export class EasySlip implements INodeType {
 			return !!(receiverBankCode || receiverName);
 		};
 
-
 		// Helper function for debug logging
 		const debugLog = (message: string, data?: any, itemIndex: number = 0): void => {
 			try {
@@ -366,7 +366,11 @@ export class EasySlip implements INodeType {
 		};
 
 		// Helper function to check if response matches filter criteria
-		const matchesFilters = (responseData: any, additionalOptions: any, itemIndex: number = 0): boolean => {
+		const matchesFilters = (
+			responseData: any,
+			additionalOptions: any,
+			itemIndex: number = 0,
+		): boolean => {
 			// If no response data or no data property, return true (no filtering)
 			if (!responseData || !responseData.data) {
 				debugLog('No response data or data property - returning true', responseData, itemIndex);
@@ -375,13 +379,17 @@ export class EasySlip implements INodeType {
 
 			const { receiverBankCode, receiverName } = additionalOptions;
 			debugLog('Filter criteria:', { receiverBankCode, receiverName }, itemIndex);
-			debugLog('Response data structure:', {
-				hasReceiver: !!responseData.data.receiver,
-				hasReceiverBank: !!responseData.data.receiver?.bank,
-				receiverBankId: responseData.data.receiver?.bank?.id,
-				receiverName: responseData.data.receiver?.account?.name?.th
-			}, itemIndex);
-			
+			debugLog(
+				'Response data structure:',
+				{
+					hasReceiver: !!responseData.data.receiver,
+					hasReceiverBank: !!responseData.data.receiver?.bank,
+					receiverBankId: responseData.data.receiver?.bank?.id,
+					receiverName: responseData.data.receiver?.account?.name?.th,
+				},
+				itemIndex,
+			);
+
 			// Log the full response data for debugging
 			if (receiverBankCode || receiverName) {
 				debugLog('Full response data for debugging:', responseData, itemIndex);
@@ -390,43 +398,58 @@ export class EasySlip implements INodeType {
 			// Check receiver bank code filter
 			if (receiverBankCode) {
 				if (!responseData.data.receiver?.bank?.id) {
-					debugLog('Receiver bank code filter failed - no receiver bank id in response', undefined, itemIndex);
+					debugLog(
+						'Receiver bank code filter failed - no receiver bank id in response',
+						undefined,
+						itemIndex,
+					);
 					return false;
 				}
-				
+
 				// Compare bank codes directly - API returns them as 3-digit strings like "004"
 				const expectedBankCode = receiverBankCode.toString();
 				const actualBankCode = responseData.data.receiver.bank.id.toString();
-				
-				debugLog('Receiver bank code comparison:', {
-					expected: expectedBankCode,
-					actual: actualBankCode,
-					match: actualBankCode === expectedBankCode
-				}, itemIndex);
-				
+
+				debugLog(
+					'Receiver bank code comparison:',
+					{
+						expected: expectedBankCode,
+						actual: actualBankCode,
+						match: actualBankCode === expectedBankCode,
+					},
+					itemIndex,
+				);
+
 				if (actualBankCode !== expectedBankCode) {
 					debugLog('Receiver bank code filter failed - no match', undefined, itemIndex);
 					return false;
 				}
 			}
 
-
 			// Check receiver name filter
 			if (receiverName) {
 				if (!responseData.data.receiver?.account?.name?.th) {
-					debugLog('Receiver name filter failed - no receiver name in response', undefined, itemIndex);
+					debugLog(
+						'Receiver name filter failed - no receiver name in response',
+						undefined,
+						itemIndex,
+					);
 					return false;
 				}
-				
+
 				const receiverNameLower = receiverName.toLowerCase().trim();
 				const actualReceiverName = responseData.data.receiver.account.name.th.toLowerCase().trim();
-				
-				debugLog('Receiver name comparison:', {
-					expected: receiverNameLower,
-					actual: actualReceiverName,
-					match: actualReceiverName.includes(receiverNameLower)
-				}, itemIndex);
-				
+
+				debugLog(
+					'Receiver name comparison:',
+					{
+						expected: receiverNameLower,
+						actual: actualReceiverName,
+						match: actualReceiverName.includes(receiverNameLower),
+					},
+					itemIndex,
+				);
+
 				if (!actualReceiverName.includes(receiverNameLower)) {
 					debugLog('Receiver name filter failed - no match', undefined, itemIndex);
 					return false;
@@ -441,13 +464,16 @@ export class EasySlip implements INodeType {
 			try {
 				const resource = this.getNodeParameter('resource', i) as string;
 				const operation = this.getNodeParameter('operation', i) as string;
-				
-				// Get additional options for filtering (only for bank slips)
-				const additionalOptions = resource === 'bankSlip' 
-					? this.getNodeParameter('additionalOptions', i, {}) as any
-					: {};
 
-				debugLog(`Processing item ${i + 1}/${items.length}: ${resource} - ${operation}`, undefined, i);
+				// Get additional options for filtering (only for bank slips)
+				const additionalOptions =
+					resource === 'bankSlip' ? (this.getNodeParameter('additionalOptions', i, {}) as any) : {};
+
+				debugLog(
+					`Processing item ${i + 1}/${items.length}: ${resource} - ${operation}`,
+					undefined,
+					i,
+				);
 				debugLog('Additional options:', additionalOptions, i);
 
 				if (resource === 'bankSlip') {
@@ -514,7 +540,11 @@ export class EasySlip implements INodeType {
 												pairedItem: { item: i },
 											});
 										} else {
-											debugLog('Filter does not match - routing duplicate slip to second output', undefined, i);
+											debugLog(
+												'Filter does not match - routing duplicate slip to second output',
+												undefined,
+												i,
+											);
 											filteredData.push({
 												json: error.response.data,
 												pairedItem: { item: i },
@@ -590,7 +620,11 @@ export class EasySlip implements INodeType {
 												pairedItem: { item: i },
 											});
 										} else {
-											debugLog('Filter does not match - routing duplicate slip to second output', undefined, i);
+											debugLog(
+												'Filter does not match - routing duplicate slip to second output',
+												undefined,
+												i,
+											);
 											filteredData.push({
 												json: error.response.data,
 												pairedItem: { item: i },
@@ -666,7 +700,11 @@ export class EasySlip implements INodeType {
 												pairedItem: { item: i },
 											});
 										} else {
-											debugLog('Filter does not match - routing duplicate slip to second output', undefined, i);
+											debugLog(
+												'Filter does not match - routing duplicate slip to second output',
+												undefined,
+												i,
+											);
 											filteredData.push({
 												json: error.response.data,
 												pairedItem: { item: i },
@@ -756,7 +794,11 @@ export class EasySlip implements INodeType {
 												pairedItem: { item: i },
 											});
 										} else {
-											debugLog('Filter does not match - routing duplicate slip to second output', undefined, i);
+											debugLog(
+												'Filter does not match - routing duplicate slip to second output',
+												undefined,
+												i,
+											);
 											filteredData.push({
 												json: error.response.data,
 												pairedItem: { item: i },
@@ -872,7 +914,9 @@ export class EasySlip implements INodeType {
 
 		// Always return dual outputs - second output is empty when no filters are applied
 		if (hasAnyFilters) {
-			debugLog(`Execution completed - Matched: ${matchedData.length}, Not Matched: ${filteredData.length}`);
+			debugLog(
+				`Execution completed - Matched: ${matchedData.length}, Not Matched: ${filteredData.length}`,
+			);
 		} else {
 			debugLog(`Execution completed - Total items: ${matchedData.length}, No filters applied`);
 		}
