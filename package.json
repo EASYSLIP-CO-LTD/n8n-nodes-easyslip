@@ -14,11 +14,11 @@
   "homepage": "",
   "author": {
     "name": "EasySlip Developer",
-    "email": "devops@racksync.com"
+    "email": "hello@easyslip.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/M4h45amu7x/n8n-nodes-easyslip.git"
+    "url": "https://github.com/EASYSLIP-CO-LTD/n8n-nodes-easyslip.git"
   },
   "engines": {
     "node": ">=20.15"
