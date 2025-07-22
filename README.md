@@ -1,7 +1,7 @@
 # n8n-nodes-easyslip
 
 <p align="center">
-  <img src="https://github.com/M4h45amu7x/n8n-nodes-easyslip/blob/main/easyslip.png" alt="EasySlip Logo" width="200"/>
+  <img src="https://easyslip.com/wp-content/uploads/2023/12/Design-V3-02-768x203.png" alt="EasySlip Logo" width="400"/>
 </p>
 
 ![EasySlip Node](https://img.shields.io/badge/n8n-community--node-blue)
