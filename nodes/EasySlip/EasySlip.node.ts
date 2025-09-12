@@ -6,7 +6,6 @@ import {
 	NodeOperationError,
 } from 'n8n-workflow';
 import { NodeConnectionType } from 'n8n-workflow';
-import FormData from 'form-data';
 
 export class EasySlip implements INodeType {
 	description: INodeTypeDescription = {
@@ -738,12 +737,13 @@ export class EasySlip implements INodeType {
 
 							const imageBuffer = await this.helpers.getBinaryDataBuffer(i, imageBinaryProperty);
 
-							// Use manual HTTP request with form-data
+							// Use native FormData API
 							const form = new FormData();
-							form.append('file', imageBuffer, {
-								filename: binaryData.fileName || 'slip.jpg',
-								contentType: binaryData.mimeType || 'image/jpeg',
+							const blob = new Blob([imageBuffer], { type: binaryData.mimeType || 'image/jpeg' });
+							const file = new File([blob], binaryData.fileName || 'slip.jpg', {
+								type: binaryData.mimeType || 'image/jpeg',
 							});
+							form.append('file', file);
 							form.append('checkDuplicate', checkDuplicateImage.toString());
 
 							const imageCredentials = await this.getCredentials('easySlipApi');
@@ -755,7 +755,6 @@ export class EasySlip implements INodeType {
 									body: form,
 									headers: {
 										Authorization: `Bearer ${imageCredentials.accessToken}`,
-										...form.getHeaders(),
 									},
 								});
 
@@ -839,12 +838,13 @@ export class EasySlip implements INodeType {
 						const imageBuffer = await this.helpers.getBinaryDataBuffer(i, imageBinaryProperty);
 						debugLog('Image buffer size:', imageBuffer.length);
 
-						// Use manual HTTP request with form-data following the API docs
+						// Use native FormData API
 						const form = new FormData();
-						form.append('file', imageBuffer, {
-							filename: binaryData.fileName || 'slip.jpg',
-							contentType: binaryData.mimeType || 'image/jpeg',
+						const blob = new Blob([imageBuffer], { type: binaryData.mimeType || 'image/jpeg' });
+						const file = new File([blob], binaryData.fileName || 'slip.jpg', {
+							type: binaryData.mimeType || 'image/jpeg',
 						});
+						form.append('file', file);
 						if (checkDuplicateWallet) {
 							form.append('checkDuplicate', checkDuplicateWallet.toString());
 						}
@@ -859,7 +859,6 @@ export class EasySlip implements INodeType {
 								body: form,
 								headers: {
 									Authorization: `Bearer ${walletCredentials.accessToken}`,
-									...form.getHeaders(),
 								},
 							});
 
