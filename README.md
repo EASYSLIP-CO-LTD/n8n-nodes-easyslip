@@ -5,7 +5,7 @@
 </p>
 
 ![EasySlip Node](https://img.shields.io/badge/n8n-community--node-blue)
-![Version](https://img.shields.io/badge/version-1.0.0-green)
+![Version](https://img.shields.io/badge/version-1.0.6-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 An n8n community node package for verifying bank slips and TrueMoney wallet slips using the EasySlip API. This node provides seamless integration with Thailand's digital payment verification system.
