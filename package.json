@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-easyslip",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "n8n community node for EasySlip API - verify bank slips and Truemoney wallet slips",
   "keywords": [
     "n8n-community-node-package",
@@ -13,7 +13,7 @@
   "license": "MIT",
   "homepage": "",
   "author": {
-    "name": "EasySlip Developer",
+    "name": "EasySlip Co., Ltd.",
     "email": "hello@easyslip.com"
   },
   "repository": {
@@ -55,8 +55,5 @@
   },
   "peerDependencies": {
     "n8n-workflow": "*"
-  },
-  "dependencies": {
-    "form-data": "^4.0.3"
   }
 }
