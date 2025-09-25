@@ -305,6 +305,12 @@ npm run prepublishOnly
 - [EasySlip Developer Documentation](https://document.easyslip.com/documents/start)
 
 
+## Release Automation
+
+- Merging `dev` into `main` triggers the **Release and Publish to NPM** GitHub Actions workflow. The pipeline runs `npm ci`, linting (`lint` and `lint:prepublish`), and `npm run build` before publishing to npm using the version in `package.json`.
+- Ensure the package version is bumped on the `dev` branch before opening the merge; npm rejects duplicate versions.
+- The workflow requires an `NPM_TOKEN` secret with publish permissions for the `n8n-nodes-easyslip` package (`Settings → Secrets and variables → Actions`).
+- The existing tag-based (`v*`) and manual (`workflow_dispatch`) triggers still work for ad-hoc releases outside of the `main` merge flow.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
