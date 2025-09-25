@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-easyslip",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "n8n community node for EasySlip API - verify bank slips and Truemoney wallet slips",
   "keywords": [
     "n8n-community-node-package",
