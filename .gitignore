@@ -8,10 +8,10 @@ yarn.lock
 .vscode/
 .payload/
 .screenshots/
+rebrand.sh
 
 # Ignore all .md files except README.md
 *.md
 !README.md
 !LICENSE.md
 !CHANGELOG.md
-
