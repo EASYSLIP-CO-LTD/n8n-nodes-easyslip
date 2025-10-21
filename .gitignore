@@ -9,6 +9,7 @@ yarn.lock
 .payload/
 .screenshots/
 rebrand.sh
+.assets/
 
 # Ignore all .md files except README.md
 *.md
